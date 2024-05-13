@@ -1,0 +1,9 @@
+[
+    {
+        "name": "Product 1",
+        "description": "Description of Product 1",
+        "image": "path/to/image.jpg",
+        "price": "19.99",
+        "category_name": "Электроника"
+    }
+]
