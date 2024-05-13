@@ -17,4 +17,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('contacts/', views.contact, name='contacts'), # Changed to 'contacts/' because in the contact.html file
     # the form action is set to 'contacts/'
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
