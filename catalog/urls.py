@@ -13,12 +13,23 @@ from .apps import CatalogConfig
 
 app_name = CatalogConfig.name
 
+# CBV
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('contacts/', views.contact, name='contacts'),
-    # Not needed anymore because I added the product_list to the home page
-    # path('product_list/', views.product_list, name='product_list'),
-    path('product_page_details/<int:pk>/', views.product_detail, name='product_page_details'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('contacts/', views.ContactView.as_view(), name='contacts'),
+    path('product_page_details/<int:pk>/', views.ProcuctDetailView.as_view(), name='product_page_details'),
+    path('blog/', views.BlogListView.as_view(), name='blog_list'),
+    path('blog/add/', views.BlogCreateView.as_view(), name='blog_add'),
+    path('blog/<slug:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
+    path('blog/edit/<slug:slug>/', views.BlogUpdateView.as_view(), name='blog_edit'),
+    path('blog/delete/<slug:slug>/', views.BlogDeleteView.as_view(), name='blog_delete'),
 ]
+
+# FBV
+# urlpatterns = [
+#     path('', views.home, name='home'),
+#     path('contacts/', views.contact, name='contacts'),
+#     path('product_page_details/<int:pk>/', views.product_detail, name='product_page_details'),
+# ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
