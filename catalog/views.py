@@ -1,14 +1,20 @@
 # Create your views here.
+from django.views.generic import ListView, TemplateView, DetailView
+
 from .models import Product
 
 
-def home(request):
-    products = Product.objects.all()  # Fetch all products, otherwise it will be empty
-    return render(request, 'catalog/home.html', {'products': products})
+# CBV
+class HomeView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
 
-def contact(request):
-    if request.method == 'POST':
+class ContactView(TemplateView):
+    template_name = 'catalog/contact.html'
+
+    def post(self, request, *args, **kwargs):
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         message = request.POST.get('message')
@@ -16,24 +22,36 @@ def contact(request):
         # Do something with the data
         print(f"Received contact info - Name: {name}, Phone: {phone}, Message: {message}")
 
-    return render(request, 'catalog/contact.html')
+        return self.render_to_response({self.get_context_data()})
 
 
-# Not needed anymore because I added the product_list to the home page
-# def product_list(request, pk=1):
-#     products = Product.objects.all()
+class ProcuctDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+
+
+# FBV
+# def home(request):
+#     products = Product.objects.all()  # Fetch all products, otherwise it will be empty
+#     return render(request, 'catalog/home.html', {'products': products})
+
+# def contact(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         phone = request.POST.get('phone')
+#         message = request.POST.get('message')
+#
+#         # Do something with the data
+#         print(f"Received contact info - Name: {name}, Phone: {phone}, Message: {message}")
+#
+#     return render(request, 'catalog/contact.html')
+
+
+# from django.shortcuts import render, get_object_or_404
+# def product_detail(request, pk):
+#     product = get_object_or_404(Product, pk=pk)
 #     context = {
-#         'products': products
+#         'product': product
 #     }
-#     return render(request, 'catalog/product_list.html', context)
-
-
-from django.shortcuts import render, get_object_or_404
-
-
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {
-        'product': product
-    }
-    return render(request, 'catalog/product_detail.html', context)
+#     return render(request, 'catalog/product_detail.html', context)

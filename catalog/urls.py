@@ -13,12 +13,18 @@ from .apps import CatalogConfig
 
 app_name = CatalogConfig.name
 
+# CBV
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('contacts/', views.contact, name='contacts'),
-    # Not needed anymore because I added the product_list to the home page
-    # path('product_list/', views.product_list, name='product_list'),
-    path('product_page_details/<int:pk>/', views.product_detail, name='product_page_details'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('contacts/', views.ContactView.as_view(), name='contacts'),
+    path('product_page_details/<int:pk>/', views.ProcuctDetailView.as_view(), name='product_page_details'),
 ]
+
+# FBV
+# urlpatterns = [
+#     path('', views.home, name='home'),
+#     path('contacts/', views.contact, name='contacts'),
+#     path('product_page_details/<int:pk>/', views.product_detail, name='product_page_details'),
+# ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
