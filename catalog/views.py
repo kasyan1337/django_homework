@@ -1,5 +1,8 @@
 # Create your views here.
-from django.urls import reverse_lazy
+from django.conf import settings
+from django.core.mail import send_mail
+from django.urls import reverse_lazy, reverse
+from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import Product, Blog
@@ -67,23 +70,38 @@ class BlogDetailView(DetailView):
     template_name = 'blog/blog_detail.html'
 
     def get_object(self, queryset=None):
-        obj = super().get_object()
+        obj = super().get_object(queryset=queryset)
         obj.view_count += 1
+        if obj.view_count == 100:
+            self.send_view_count_email(obj.title, obj.view_count)
         obj.save()
         return obj
 
+    def send_view_count_email(self, blog_title, view_count):
+        subject = f"Blog {blog_title} reached {view_count} views!"
+        message = f"Congrats! Blog {blog_title} reached {view_count} views!"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [settings.EMAIL_HOST_USER]
+        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
 
 class BlogCreateView(CreateView):
     model = Blog
     template_name = 'blog/blog_form.html'
     fields = ['title', 'content', 'preview', 'is_published']
-    success_url = reverse_lazy('catalog:blog_list')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(self.object.title)
+        self.object.save()
+        return super().form_valid(form)
 
 class BlogUpdateView(UpdateView):
     model = Blog
     template_name = 'blog/blog_form.html'
     fields = ['title', 'content', 'preview', 'is_published']
-    success_url = reverse_lazy('catalog:blog_list')
+
+    def get_success_url(self):
+        return reverse('catalog:blog_detail', kwargs={'slug': self.object.slug})
 
 class BlogDeleteView(DeleteView):
     model = Blog
