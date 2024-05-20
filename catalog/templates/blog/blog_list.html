@@ -1,0 +1,14 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+<h1>Blog Posts</h1>
+<ul>
+    {% for blog in object_list %}
+    <li>
+        <a href="{% url 'catalog:blog_detail' slug=blog.slug %}">{{ blog.title }}</a>
+        - Views: {{ blog.view_count }}
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'catalog:blog_add' %}">Add New Blog</a>
+{% endblock %}

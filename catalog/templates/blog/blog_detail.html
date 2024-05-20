@@ -1,0 +1,14 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+{% if object.preview %}
+    <img src="{{ object.preview.url }}" alt="Preview Image">
+{% else %}
+    <p>No preview available.</p>
+{% endif %}
+<p>{{ object.content }}</p>
+<p>Views: {{ object.view_count }}</p>
+<a href="{% url 'catalog:blog_edit' slug=object.slug %}">Edit</a>
+<a href="{% url 'catalog:blog_delete' slug=object.slug %}">Delete</a>
+{% endblock %}

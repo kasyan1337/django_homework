@@ -18,6 +18,11 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('contacts/', views.ContactView.as_view(), name='contacts'),
     path('product_page_details/<int:pk>/', views.ProcuctDetailView.as_view(), name='product_page_details'),
+    path('blog/', views.BlogListView.as_view(), name='blog_list'),
+    path('blog/add/', views.BlogCreateView.as_view(), name='blog_add'),
+    path('blog/<slug:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
+    path('blog/edit/<slug:slug>/', views.BlogUpdateView.as_view(), name='blog_edit'),
+    path('blog/delete/<slug:slug>/', views.BlogDeleteView.as_view(), name='blog_delete'),
 ]
 
 # FBV

@@ -1,7 +1,8 @@
 # Create your views here.
-from django.views.generic import ListView, TemplateView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from .models import Product
+from .models import Product, Blog
 
 
 # CBV
@@ -55,3 +56,36 @@ class ProcuctDetailView(DetailView):
 #         'product': product
 #     }
 #     return render(request, 'catalog/product_detail.html', context)
+
+class BlogListView(ListView):
+    model = Blog
+    template_name = 'blog/blog_list.html'
+    queryset = Blog.objects.filter(is_published=True)
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'blog/blog_detail.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object()
+        obj.view_count += 1
+        obj.save()
+        return obj
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+    template_name = 'blog/blog_form.html'
+    fields = ['title', 'content', 'preview', 'is_published']
+    success_url = reverse_lazy('catalog:blog_list')
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+    template_name = 'blog/blog_form.html'
+    fields = ['title', 'content', 'preview', 'is_published']
+    success_url = reverse_lazy('catalog:blog_list')
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    template_name = 'blog/blog_confirm_delete.html'
+    success_url = reverse_lazy('catalog:blog_list')
