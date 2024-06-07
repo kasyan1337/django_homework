@@ -27,6 +27,8 @@ urlpatterns = [
     path('product/new/', views.ProductCreateView.as_view(), name='product-create'),
     path('product/<int:pk>/edit/', views.ProductUpdateView.as_view(), name='product-update'),
     path('product/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
+    path('version/new/', views.VersionCreateView.as_view(), name='version-create'),
+    path('version/<int:pk>/edit/', views.VersionUpdateView.as_view(), name='version-update'),
 ]
 
 # FBV

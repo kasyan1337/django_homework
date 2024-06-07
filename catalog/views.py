@@ -5,8 +5,8 @@ from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import ProductForm
-from .models import Product, Blog
+from .forms import ProductForm, VersionForm
+from .models import Product, Blog, Version
 
 
 # CBV
@@ -86,10 +86,11 @@ class BlogDeleteView(DeleteView):
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        for product in context['object_list']:
+        for product in context['products']:
             product.active_version = product.versions.filter(is_active=True).first()
         return context
 
@@ -98,6 +99,11 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'].active_version = context['product'].versions.filter(is_active=True).first()
+        return context
 
 
 class ProductCreateView(CreateView):
@@ -117,4 +123,18 @@ class ProductUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class VersionCreateView(CreateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/version_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class VersionUpdateView(UpdateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/version_form.html'
     success_url = reverse_lazy('catalog:home')

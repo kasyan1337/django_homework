@@ -35,8 +35,8 @@ class Product(models.Model):
 
 class Version(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions")
-    version = models.CharField(max_length=255)
-    version_name = models.CharField(max_length=255)
+    version_number = models.CharField(max_length=20)
+    version_name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=False)
 
     class Meta:
@@ -44,7 +44,7 @@ class Version(models.Model):
         verbose_name_plural = "Versions"
 
     def __str__(self):
-        return self.version
+        return f"{self.product.name} - {self.version_name} ({self.version_number})"
 
 
 class Blog(models.Model):
