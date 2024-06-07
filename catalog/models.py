@@ -33,6 +33,20 @@ class Product(models.Model):
         return self.name
 
 
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions")
+    version = models.CharField(max_length=255)
+    version_name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Version"
+        verbose_name_plural = "Versions"
+
+    def __str__(self):
+        return self.version
+
+
 class Blog(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True, null=True)
