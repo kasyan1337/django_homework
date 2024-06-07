@@ -5,3 +5,5 @@ ipython
 Pillow
 Black
 django-environ
+django-crispy-forms
+crispy-bootstrap4

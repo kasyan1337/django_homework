@@ -1,19 +1,32 @@
+<!-- product_detail.html -->
 {% extends 'catalog/base.html' %}
-{% load catalog_tags %}
+
 {% block content %}
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
-                    <img src="{{ product.image|media_url }}" alt="{{ product.name }}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
                     <div class="card-body">
-                        <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        {% if product.active_version %}
+                        <p class="card-text">
+                            <strong>Active Version:</strong> {{ product.active_version.version_name }} ({{
+                            product.active_version.version_number }})
+                        </p>
+                        {% endif %}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a href="{% url 'catalog:home' %}"
-                                   class="btn btn-sm btn-outline-secondary">Back to the home page</a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Buy immediately!</button>
+                                   class="btn btn-sm btn-outline-secondary">Buy</a>
+                                <a href="{% url 'catalog:product-update' product.pk %}"
+                                   class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="{% url 'catalog:product-delete' product.pk %}"
+                                   class="btn btn-sm btn-outline-danger">Delete</a>
+                                <a href="{% url 'catalog:home' %}"
+                                   class="btn btn-sm btn-outline-secondary">Back</a>
                             </div>
                             <small class="text-muted">{{ product.price }} RMB</small>
                         </div>

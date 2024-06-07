@@ -5,7 +5,8 @@ from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from .models import Product, Blog
+from .forms import ProductForm, VersionForm
+from .models import Product, Blog, Version
 
 
 # CBV
@@ -29,41 +30,11 @@ class ContactView(TemplateView):
         return self.render_to_response({self.get_context_data()})
 
 
-class ProcuctDetailView(DetailView):
-    model = Product
-    template_name = 'catalog/product_detail.html'
-    context_object_name = 'product'
-
-
-# FBV
-# def home(request):
-#     products = Product.objects.all()  # Fetch all products, otherwise it will be empty
-#     return render(request, 'catalog/home.html', {'products': products})
-
-# def contact(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         phone = request.POST.get('phone')
-#         message = request.POST.get('message')
-#
-#         # Do something with the data
-#         print(f"Received contact info - Name: {name}, Phone: {phone}, Message: {message}")
-#
-#     return render(request, 'catalog/contact.html')
-
-
-# from django.shortcuts import render, get_object_or_404
-# def product_detail(request, pk):
-#     product = get_object_or_404(Product, pk=pk)
-#     context = {
-#         'product': product
-#     }
-#     return render(request, 'catalog/product_detail.html', context)
-
 class BlogListView(ListView):
     model = Blog
     template_name = 'blog/blog_list.html'
     queryset = Blog.objects.filter(is_published=True)
+
 
 class BlogDetailView(DetailView):
     model = Blog
@@ -84,6 +55,7 @@ class BlogDetailView(DetailView):
         recipient_list = [settings.EMAIL_HOST_USER]
         send_mail(subject, message, email_from, recipient_list, fail_silently=False)
 
+
 class BlogCreateView(CreateView):
     model = Blog
     template_name = 'blog/blog_form.html'
@@ -95,6 +67,7 @@ class BlogCreateView(CreateView):
         self.object.save()
         return super().form_valid(form)
 
+
 class BlogUpdateView(UpdateView):
     model = Blog
     template_name = 'blog/blog_form.html'
@@ -103,7 +76,65 @@ class BlogUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('catalog:blog_detail', kwargs={'slug': self.object.slug})
 
+
 class BlogDeleteView(DeleteView):
     model = Blog
     template_name = 'blog/blog_confirm_delete.html'
     success_url = reverse_lazy('catalog:blog_list')
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for product in context['products']:
+            product.active_version = product.versions.filter(is_active=True).first()
+        return context
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'].active_version = context['product'].versions.filter(is_active=True).first()
+        return context
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'catalog/product_confirm_delete.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class VersionCreateView(CreateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/version_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+
+class VersionUpdateView(UpdateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/version_form.html'
+    success_url = reverse_lazy('catalog:home')
