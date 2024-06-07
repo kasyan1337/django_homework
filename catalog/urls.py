@@ -17,12 +17,16 @@ app_name = CatalogConfig.name
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('contacts/', views.ContactView.as_view(), name='contacts'),
-    path('product_page_details/<int:pk>/', views.ProcuctDetailView.as_view(), name='product_page_details'),
+    path('product_page_details/<int:pk>/', views.ProductDetailView.as_view(), name='product_page_details'),
     path('blog/', views.BlogListView.as_view(), name='blog_list'),
     path('blog/add/', views.BlogCreateView.as_view(), name='blog_add'),
     path('blog/<slug:slug>/', views.BlogDetailView.as_view(), name='blog_detail'),
     path('blog/edit/<slug:slug>/', views.BlogUpdateView.as_view(), name='blog_edit'),
     path('blog/delete/<slug:slug>/', views.BlogDeleteView.as_view(), name='blog_delete'),
+    path('product/<int:pk>/', views.ProductDetailView.as_view(), name='product-detail'),
+    path('product/new/', views.ProductCreateView.as_view(), name='product-create'),
+    path('product/<int:pk>/edit/', views.ProductUpdateView.as_view(), name='product-update'),
+    path('product/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
 ]
 
 # FBV

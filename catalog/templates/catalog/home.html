@@ -1,9 +1,15 @@
+<!-- home.html -->
 {% extends 'catalog/base.html' %}
 {% load catalog_tags %}
 
 {% block content %}
 <div class="album py-5 bg-light">
     <div class="container">
+        <div class="row mb-3">
+            <div class="col">
+                <a href="{% url 'catalog:product-create' %}" class="btn btn-primary">Add New Product</a>
+            </div>
+        </div>
         <div class="row">
             {% for product in products %}
             <div class="col-md-4">
