@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'catalog',
     'crispy_forms',
     'crispy_bootstrap4',
+    'users',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -152,3 +153,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env('EMAIL_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 EMAIL_RECEIVER = env('EMAIL_RECEIVER')
+
+AUTH_USER_MODEL = 'users.CustomUser'
