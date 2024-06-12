@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'catalog',
     'crispy_forms',
     'crispy_bootstrap4',
+    'users',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -146,9 +147,24 @@ env = environ.Env(
 environ.Env.read_env(env_file=str(BASE_DIR.path('.env')))
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('EMAIL_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
-EMAIL_RECEIVER = env('EMAIL_RECEIVER')
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = env('EMAIL_USER')
+# EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
+# EMAIL_RECEIVER = env('EMAIL_RECEIVER')
+
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = env('YANDEX_USER')
+EMAIL_HOST_PASSWORD = env('YANDEX_APP_PASSWORD')
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_REDIRECT_URL = 'catalog:home'
