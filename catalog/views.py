@@ -1,5 +1,5 @@
-# Create your views here.
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
@@ -9,7 +9,6 @@ from .forms import ProductForm, VersionForm
 from .models import Product, Blog, Version
 
 
-# CBV
 class HomeView(ListView):
     model = Product
     template_name = 'catalog/home.html'
@@ -24,7 +23,6 @@ class ContactView(TemplateView):
         phone = request.POST.get('phone')
         message = request.POST.get('message')
 
-        # Do something with the data
         print(f"Received contact info - Name: {name}, Phone: {phone}, Message: {message}")
 
         return self.render_to_response({self.get_context_data()})
@@ -106,34 +104,38 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:home')
 
 
-class ProductUpdateView(UpdateView):
-    model = Product
-    form_class = ProductForm
-    template_name = 'catalog/product_form.html'
-    success_url = reverse_lazy('catalog:home')
-
-
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
 
 
-class VersionCreateView(CreateView):
+class VersionCreateView(LoginRequiredMixin, CreateView):
     model = Version
     form_class = VersionForm
     template_name = 'catalog/version_form.html'
     success_url = reverse_lazy('catalog:home')
 
 
-class VersionUpdateView(UpdateView):
+class VersionUpdateView(LoginRequiredMixin, UpdateView):
     model = Version
     form_class = VersionForm
     template_name = 'catalog/version_form.html'
