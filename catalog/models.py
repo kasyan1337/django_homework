@@ -27,10 +27,17 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True,
                                    verbose_name='Created by', help_text='User who created the product')
+    is_published = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
+
+        permissions = [
+            ('can_unpublish_product', "Can unpublish product"),
+            ('can_edit_product', "Can edit product"),
+            ('can_change_product_category', "Can change product category"),
+        ]
 
     def __str__(self):
         return self.name

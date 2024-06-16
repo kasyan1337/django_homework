@@ -5,9 +5,9 @@ from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import ProductForm, VersionForm
+from .forms import ProductForm, VersionForm, ProductModeratorForm
 from .models import Product, Blog, Version
-
+from django.core.exceptions import PermissionDenied
 
 class HomeView(ListView):
     model = Product
@@ -120,6 +120,13 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:home')
+
+    def get_form_class(self):
+        user = self.request.user
+        if user.has_perm('catalog.can_edit_product') or user == self.get_object().created_by:
+            return ProductModeratorForm
+        else:
+            raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):

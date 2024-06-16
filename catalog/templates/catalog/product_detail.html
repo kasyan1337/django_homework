@@ -21,10 +21,12 @@
                             <div class="btn-group">
                                 <a href="{% url 'catalog:home' %}"
                                    class="btn btn-sm btn-outline-secondary">Buy</a>
+                                {% if perms.catalog.can_edit_product or request.user == product.created_by%}
                                 <a href="{% url 'catalog:product-update' product.pk %}"
                                    class="btn btn-sm btn-outline-secondary">Edit</a>
                                 <a href="{% url 'catalog:product-delete' product.pk %}"
                                    class="btn btn-sm btn-outline-danger">Delete</a>
+                                {% endif %}
                                 <a href="{% url 'catalog:home' %}"
                                    class="btn btn-sm btn-outline-secondary">Back</a>
                             </div>
