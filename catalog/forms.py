@@ -38,3 +38,9 @@ class VersionForm(forms.ModelForm):
         if is_active and product.versions.filter(is_active=True).exists():
             raise forms.ValidationError("Active version already exists")
         return is_active
+
+
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('category', 'is_published', 'description')
