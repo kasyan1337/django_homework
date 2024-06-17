@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,8 +57,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_homework.urls'
 
-import os
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -77,8 +77,6 @@ WSGI_APPLICATION = 'django_homework.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-import os
 
 DATABASES = {
     'default': {
@@ -134,8 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-import environ
 
 BASE_DIR = environ.Path(__file__) - 2  # go up 2 directories
 
