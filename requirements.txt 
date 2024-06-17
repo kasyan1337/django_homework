@@ -7,3 +7,5 @@ Black
 django-environ
 django-crispy-forms
 crispy-bootstrap4
+redis
+python-dotenv

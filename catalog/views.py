@@ -9,6 +9,9 @@ from .forms import ProductForm, VersionForm, ProductModeratorForm
 from .models import Product, Blog, Version
 from django.core.exceptions import PermissionDenied
 
+from .services import get_product_list_from_cache
+
+
 class HomeView(ListView):
     model = Product
     template_name = 'catalog/home.html'
@@ -85,6 +88,9 @@ class ProductListView(ListView):
     model = Product
     template_name = 'catalog/home.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        return get_product_list_from_cache()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
