@@ -124,15 +124,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-BASE_DIR = environ.Path(__file__) - 2  # go up 2 directories
-
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-
-# Read .env file
-environ.Env.read_env(env_file=str(BASE_DIR.path('.env')))
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
